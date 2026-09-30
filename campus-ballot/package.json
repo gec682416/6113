@@ -1,0 +1,13 @@
+{
+  "name": "campus-ballot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "vendor": "node scripts/vendor.mjs",
+    "test": "node --test tests/contract.test.mjs tests/frontend.test.mjs",
+    "local-chain": "node scripts/local-chain.mjs"
+  },
+  "dependencies": { "ethers": "6.16.0" },
+  "devDependencies": { "ganache": "7.9.2", "solc": "0.8.24" }
+}

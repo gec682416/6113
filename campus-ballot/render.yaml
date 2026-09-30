@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: campus-ballot
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT app:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: CONTRACT_ADDRESS
+        value: "0x00a08f3025b0B746093A524Db7179884c9813D77"
+      - key: RPC_URL
+        value: https://ethereum-sepolia-rpc.publicnode.com

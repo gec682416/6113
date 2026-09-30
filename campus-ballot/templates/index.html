@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f7f2">
+  <meta name="description" content="Choose our next campus activity. One wallet, one vote, recorded on Sepolia.">
+  <title>Campus Ballot · Your campus, your call.</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script defer src="{{ url_for('static', filename='vendor/ethers.umd.min.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+  <a class="skip-link" href="#ballot">Skip to ballot</a>
+  <header class="header wrap">
+    <a class="brand" href="/" aria-label="Campus Ballot home"><span class="brand-mark" aria-hidden="true">cb.</span><span>campus<span class="brand-second">ballot</span></span></a>
+    <nav aria-label="Main navigation"><a href="#ballot" class="nav-link">The ballot</a><a href="#how-it-works" class="nav-link">How it works</a></nav>
+    <button id="connect" class="button button-dark">Connect wallet <span aria-hidden="true">↗</span></button>
+  </header>
+  <main class="wrap">
+    <section class="intro" aria-labelledby="intro-title">
+      <div class="intro-copy"><p class="eyebrow"><span class="dot"></span> SMALL CHOICES. SHARED EXPERIENCES.</p>
+        <h1 id="intro-title">Your campus.<br><span>Your call.</span></h1>
+        <p class="intro-description">A movie under the stars or a weekend outdoors?<br class="desktop-break"> Help choose what we do next. Put your vote on the chain.</p>
+        <div class="intro-tags"><span>One wallet, one vote</span><span>Public results</span><span>Sepolia testnet</span></div>
+      </div>
+      <aside class="ballot-art" aria-label="A ballot slip with a checkmark entering a ballot box">
+        <span class="art-caption">A LITTLE INPUT.<br>A SHARED NEXT CHAPTER.</span>
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="paper"><span>CAMPUS BALLOT</span><div class="paper-check">✓</div><i></i><i></i><small>MAKE IT COUNT.</small></div>
+        <div class="ballot-box"><div class="slot"></div><span>YOUR VOICE<br>BELONGS HERE.</span><b aria-hidden="true">↗</b></div>
+        <span class="art-bottom">COLLECTIVE PLANS, INDIVIDUAL CHOICES.</span>
+      </aside>
+    </section>
+
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+    <noscript><p class="notice">Enable JavaScript to connect your wallet and read blockchain results.</p></noscript>
+
+    <section id="ballot" class="ballot-layout" aria-labelledby="ballot-title">
+      <div class="ballot-main">
+        <div class="section-top"><p class="eyebrow">THE COMMUNITY BALLOT / 001</p><span id="poll-status" class="status-badge">Checking network</span></div>
+        <h2 id="ballot-title">What should our next<br class="desktop-break"> campus activity be?</h2>
+        <p class="section-description">Pick the plan you would actually show up for.</p>
+        <form id="vote-form">
+          <fieldset id="options" disabled><legend class="sr-only">Choose one campus activity</legend>
+            <label class="option"><input type="radio" name="activity" value="0"><span class="option-number">01</span><span class="option-copy"><strong>Outdoor movie night</strong><small>A big screen, a picnic blanket, and good company.</small></span><span class="radio-mark" aria-hidden="true"></span></label>
+            <label class="option"><input type="radio" name="activity" value="1"><span class="option-number">02</span><span class="option-copy"><strong>Board game social</strong><small>Meet new people over a little friendly competition.</small></span><span class="radio-mark" aria-hidden="true"></span></label>
+            <label class="option"><input type="radio" name="activity" value="2"><span class="option-number">03</span><span class="option-copy"><strong>Weekend nature walk</strong><small>Log off for a morning. Take the scenic route.</small></span><span class="radio-mark" aria-hidden="true"></span></label>
+            <label class="option"><input type="radio" name="activity" value="3"><span class="option-number">04</span><span class="option-copy"><strong>Creative workshop</strong><small>Try something hands-on and make it your own.</small></span><span class="radio-mark" aria-hidden="true"></span></label>
+          </fieldset>
+          <div class="vote-action"><button id="vote" class="button button-green" type="submit" disabled>Connect wallet to vote <span aria-hidden="true">↗</span></button><p id="vote-hint">Votes are final. A small Sepolia test ETH gas fee applies.</p></div>
+        </form>
+        <div id="transaction" class="transaction" aria-live="polite" hidden></div>
+      </div>
+      <aside class="results-panel" aria-labelledby="results-title">
+        <div class="results-heading"><h3 id="results-title">The count so far</h3><button id="refresh" class="icon-button" aria-label="Refresh results" title="Refresh results">↻</button></div>
+        <p class="results-caption">Read directly from the blockchain.</p>
+        <div class="vote-total"><strong id="total">—</strong><span>votes recorded</span></div>
+        <div id="results" aria-busy="true">
+          {% for name in ['Outdoor movie night', 'Board game social', 'Weekend nature walk', 'Creative workshop'] %}
+          <div class="result-row"><div><span>{{ name }}</span><strong id="percent-{{ loop.index0 }}">—</strong></div><div class="result-track"><span id="bar-{{ loop.index0 }}"></span></div><small id="count-{{ loop.index0 }}">Awaiting blockchain</small></div>
+          {% endfor %}
+        </div>
+        <p id="results-note" class="results-note">No wallet needed to view results.</p>
+        <dl class="poll-meta"><div><dt>Network</dt><dd>Sepolia testnet</dd></div><div><dt>Voting ends</dt><dd id="deadline">—</dd></div><div><dt>Your vote</dt><dd id="my-vote">Wallet not connected</dd></div></dl>
+        <a id="contract-link" class="text-link" target="_blank" rel="noopener noreferrer" hidden>View contract on Etherscan <span aria-hidden="true">↗</span></a>
+      </aside>
+    </section>
+
+    <section id="how-it-works" class="how-section" aria-labelledby="how-title"><div><p class="eyebrow">NO SIGN-UP. JUST A SAY.</p><h2 id="how-title">Three steps.<br>One shared decision.</h2></div><ol class="steps"><li><span>01</span><div><h3>Bring your wallet</h3><p>Connect MetaMask on Sepolia. On your phone, open this page in MetaMask’s built-in browser.</p></div></li><li><span>02</span><div><h3>Choose your plan</h3><p>Select one activity, then approve the vote in your wallet. You only need test ETH for the network fee.</p></div></li><li><span>03</span><div><h3>See it counted</h3><p>Once confirmed, your vote joins the public tally. Every address gets one vote, and every vote is final.</p></div></li></ol></section>
+    <section class="mobile-callout"><div><h3>Taking this to your phone?</h3><p>Browse results anywhere. To vote, use MetaMask’s in-app browser.</p></div><a id="mobile-link" class="button button-outline" href="https://metamask.io/download/" target="_blank" rel="noopener noreferrer">Open in MetaMask <span aria-hidden="true">↗</span></a></section>
+  </main>
+  <footer class="footer wrap"><span>campus ballot <span class="footer-divider">/</span> A 6106 student Dapp</span><p>Public votes · No real-money payments · One address is not a verified student identity</p></footer>
+</body>
+</html>
